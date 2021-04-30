@@ -1,4 +1,4 @@
-﻿namespace DH.Grid.Configuration
+﻿namespace DH.GridSystem.Configuration
 {
     public interface IGridConfiguration
     {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using DH.GridSystem.Cell;
+using DH.GridSystem.Grids;
 
-namespace DH.Grid.Visitors
+namespace DH.GridSystem.Visitors
 {
     public class ColumnDownShifter : IGridVisitor
     {

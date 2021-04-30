@@ -1,7 +1,9 @@
-﻿namespace DH.Grid.Visitors
+﻿using DH.GridSystem.Grids;
+
+namespace DH.GridSystem.Visitors
 {
     public interface IGridVisitor
     {
-        void Visit(DH.Grid.SquareGrid g);
+        void Visit(SquareGrid g);
     }
 }

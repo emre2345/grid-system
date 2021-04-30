@@ -1,4 +1,6 @@
-﻿namespace DH.Grid
+﻿using System;
+
+namespace DH.GridSystem.Cell
 {
     public class Cell
     {
@@ -9,12 +11,23 @@
 
         public int Row => row;
 
-        private ICellContent content;
+        public Action<ICellContent> OnContentChanged
+        {
+            get;
+            set;
+        }
+
+        private ICellContent content = new NullContent();
 
         public ICellContent Content
         {
             get { return content; }
-            set { content = value; }
+            set
+            {
+                content = value;
+                content.OnCellChanged?.Invoke(this);
+                OnContentChanged?.Invoke(content);
+            }
         }
 
         public Cell(int column, int row)

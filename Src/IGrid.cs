@@ -1,14 +1,27 @@
 ﻿using System.Collections.Generic;
-using DH.Grid.Visitors;
+using DH.GridSystem.Cell;
+using DH.GridSystem.Visitors;
 
-namespace DH.Grid
+namespace DH.GridSystem
 {
     public interface IGrid
     {
-        List<CellCollection> Columns { get; }
-        List<CellCollection> Rows { get; }
+        List<CellCollection> Columns
+        {
+            get;
+        }
 
-        Cell GetCell(int column, int row);
+        List<CellCollection> Rows
+        {
+            get;
+        }
+
+        Cell.Cell GetCell(int column, int row);
+
+        Cell.Cell[] CellsWithContent
+        {
+            get;
+        }
 
         void Accept(IGridVisitor visitor);
     }

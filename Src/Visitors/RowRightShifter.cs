@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using DH.GridSystem.Cell;
+using DH.GridSystem.Grids;
 
-namespace DH.Grid.Visitors
+namespace DH.GridSystem.Visitors
 {
     public class RowRightShifter : IGridVisitor
     {
@@ -13,7 +15,7 @@ namespace DH.Grid.Visitors
             this.shiftAmount = shiftAmount;
         }
 
-        public void Visit(DH.Grid.SquareGrid g)
+        public void Visit(SquareGrid g)
         {
             Dictionary<int, ICellContent> contents = new Dictionary<int, ICellContent>(g.Rows[this.row].Count);
             CellCollection row = g.Rows[this.row];

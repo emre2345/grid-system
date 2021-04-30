@@ -1,4 +1,4 @@
-﻿namespace DH.Grid
+﻿namespace DH.GridSystem
 {
     public static class GridMath
     {

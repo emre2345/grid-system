@@ -4,10 +4,12 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using DH.GridSystem;
+using DH.GridSystem.Cell;
+using DH.GridSystem.Configuration;
+using DH.GridSystem.Grids;
+using DH.GridSystem.Visitors;
 using NSubstitute;
-using DH.Grid.Configuration;
-using DH.Grid;
-using DH.Grid.Visitors;
 using Random = System.Random;
 
 public class Grid
@@ -50,7 +52,7 @@ public class Grid
     public void BasicGridCreation()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         Assert.AreEqual(conf.ColumnCount, grid.Columns.Count);
         Assert.AreEqual(conf.RowCount, grid.Rows.Count);
@@ -78,7 +80,7 @@ public class Grid
     public void SetGridCellContent()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         ICellContent content = Substitute.For<ICellContent>();
         Cell cell = grid.GetCell(0, 0);
@@ -91,7 +93,7 @@ public class Grid
     public void ShiftRowRight()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillRowContents(grid, contents);
@@ -130,7 +132,7 @@ public class Grid
     public void ShiftRowLeft()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillRowContents(grid, contents);
@@ -148,7 +150,7 @@ public class Grid
     public void ShiftColumnUp()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillColumnContents(grid, contents);
@@ -166,7 +168,7 @@ public class Grid
     public void ShiftColumnDown()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.SquareGrid(conf);
+        IGrid grid = new SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillColumnContents(grid, contents);

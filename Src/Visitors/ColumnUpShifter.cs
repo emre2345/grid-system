@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using DH.GridSystem.Cell;
+using DH.GridSystem.Grids;
 using UnityEngine;
 
-namespace DH.Grid.Visitors
+namespace DH.GridSystem.Visitors
 {
     public class ColumnUpShifter : IGridVisitor
     {
