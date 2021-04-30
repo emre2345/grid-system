@@ -1,0 +1,14 @@
+{
+    "name": "GridSystemTests",
+    "references": [
+        "GridSystem"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
