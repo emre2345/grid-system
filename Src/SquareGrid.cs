@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DH.Grid
 {
-    public class Grid : IGrid
+    public class SquareGrid : IGrid
     {
         private CellCollection allCells;
         private List<CellCollection> columns;
@@ -24,10 +24,10 @@ namespace DH.Grid
 
         private int columnCount;
 
-        public Grid(IGridConfiguration config)
+        public SquareGrid(IGridConfiguration config)
         {
             columnCount = config.ColumnCount;
-            
+
             CreateCells(config.ColumnCount, config.RowCount);
             BuildColumns(config.ColumnCount, config.RowCount);
             BuildRows(config.ColumnCount, config.RowCount);
@@ -45,30 +45,32 @@ namespace DH.Grid
 
         void BuildColumns(int columnCount, int rowCount)
         {
-            columns = new List<CellCollection>(Enumerable.Range(0, columnCount).Select<int, CellCollection>(delegate(int columnIndex)
-            {
-                List<Cell> columnCells = Enumerable.Range(0, rowCount).Select<int, Cell>(delegate(int rowIndex)
+            columns = new List<CellCollection>(Enumerable.Range(0, columnCount).Select<int, CellCollection>(
+                delegate(int columnIndex)
+                {
+                    List<Cell> columnCells = Enumerable.Range(0, rowCount).Select<int, Cell>(delegate(int rowIndex)
                     {
                         return GetCell(columnIndex, rowIndex);
                     }).ToList();
-                
-                CellCollection column = new CellCollection(columnCells);
-                return column;
-            }));
+
+                    CellCollection column = new CellCollection(columnCells);
+                    return column;
+                }));
         }
 
         void BuildRows(int columnCount, int rowCount)
         {
-            rows = new List<CellCollection>(Enumerable.Range(0, rowCount).Select<int, CellCollection>(delegate(int rowIndex)
-            {
-                List<Cell> rowCells = Enumerable.Range(0, columnCount).Select<int, Cell>(delegate(int columnIndex)
+            rows = new List<CellCollection>(Enumerable.Range(0, rowCount).Select<int, CellCollection>(
+                delegate(int rowIndex)
+                {
+                    List<Cell> rowCells = Enumerable.Range(0, columnCount).Select<int, Cell>(delegate(int columnIndex)
                     {
                         return GetCell(columnIndex, rowIndex);
                     }).ToList();
-                
-                CellCollection row = new CellCollection(rowCells);
-                return row;
-            }));
+
+                    CellCollection row = new CellCollection(rowCells);
+                    return row;
+                }));
         }
 
         public Cell GetCell(int column, int row)

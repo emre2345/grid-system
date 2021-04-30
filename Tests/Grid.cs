@@ -50,7 +50,7 @@ public class Grid
     public void BasicGridCreation()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         Assert.AreEqual(conf.ColumnCount, grid.Columns.Count);
         Assert.AreEqual(conf.RowCount, grid.Rows.Count);
@@ -78,7 +78,7 @@ public class Grid
     public void SetGridCellContent()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         ICellContent content = Substitute.For<ICellContent>();
         Cell cell = grid.GetCell(0, 0);
@@ -91,7 +91,7 @@ public class Grid
     public void ShiftRowRight()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillRowContents(grid, contents);
@@ -130,7 +130,7 @@ public class Grid
     public void ShiftRowLeft()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillRowContents(grid, contents);
@@ -148,7 +148,7 @@ public class Grid
     public void ShiftColumnUp()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillColumnContents(grid, contents);
@@ -166,7 +166,7 @@ public class Grid
     public void ShiftColumnDown()
     {
         IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new DH.Grid.Grid(conf);
+        IGrid grid = new DH.Grid.SquareGrid(conf);
 
         List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
         FillColumnContents(grid, contents);

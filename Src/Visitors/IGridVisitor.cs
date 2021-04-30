@@ -2,6 +2,6 @@
 {
     public interface IGridVisitor
     {
-        void Visit(DH.Grid.Grid g);
+        void Visit(DH.Grid.SquareGrid g);
     }
 }
