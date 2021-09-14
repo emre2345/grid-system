@@ -43,7 +43,7 @@ namespace DH.GridSystem.Grids
             allCells = new CellCollection(Enumerable.Range(0, columnCount * rowCount).Select(delegate(int index)
             {
                 int column, row;
-                GridMath.CalculateColumnRow(index, columnCount, rowCount, out column, out row);
+                GridMath.CalculateColumnRow(index, columnCount, out column, out row);
                 return new Cell.Cell(column, row);
             }));
         }
@@ -53,10 +53,9 @@ namespace DH.GridSystem.Grids
             columns = new List<CellCollection>(Enumerable.Range(0, columnCount).Select<int, CellCollection>(
                 delegate(int columnIndex)
                 {
-                    List<Cell.Cell> columnCells = Enumerable.Range(0, rowCount).Select<int, Cell.Cell>(delegate(int rowIndex)
-                    {
-                        return GetCell(columnIndex, rowIndex);
-                    }).ToList();
+                    List<Cell.Cell> columnCells = Enumerable.Range(0, rowCount)
+                        .Select<int, Cell.Cell>(delegate(int rowIndex) { return GetCell(columnIndex, rowIndex); })
+                        .ToList();
 
                     CellCollection column = new CellCollection(columnCells);
                     return column;
@@ -68,10 +67,9 @@ namespace DH.GridSystem.Grids
             rows = new List<CellCollection>(Enumerable.Range(0, rowCount).Select<int, CellCollection>(
                 delegate(int rowIndex)
                 {
-                    List<Cell.Cell> rowCells = Enumerable.Range(0, columnCount).Select<int, Cell.Cell>(delegate(int columnIndex)
-                    {
-                        return GetCell(columnIndex, rowIndex);
-                    }).ToList();
+                    List<Cell.Cell> rowCells = Enumerable.Range(0, columnCount)
+                        .Select<int, Cell.Cell>(delegate(int columnIndex) { return GetCell(columnIndex, rowIndex); })
+                        .ToList();
 
                     CellCollection row = new CellCollection(rowCells);
                     return row;

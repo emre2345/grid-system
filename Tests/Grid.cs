@@ -1,205 +1,202 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
-using DH.GridSystem;
 using DH.GridSystem.Cell;
 using DH.GridSystem.Configuration;
 using DH.GridSystem.Grids;
 using DH.GridSystem.Visitors;
 using NSubstitute;
-using Random = System.Random;
 
-public class Grid
+namespace DH.GridSystem.Test
 {
-    IGridConfiguration CreateTestConfig()
+    public class Grid
     {
-        IGridConfiguration conf = Substitute.For<IGridConfiguration>();
-        conf.ColumnCount.Returns(5);
-        conf.RowCount.Returns(5);
-        return conf;
-    }
-
-    [Test]
-    public void CalculateColumnRow()
-    {
-        int column = 5;
-        int row = 10;
-        int total = column * row;
-
-        int calcColumn;
-        int calcRow;
-
-        int currentColumn = 0;
-        int currentRow = 0;
-
-        for (int i = 0; i < total; i++)
+        IGridConfiguration CreateTestConfig()
         {
-            GridMath.CalculateColumnRow(i, column, row, out calcColumn, out calcRow);
-            Assert.AreEqual(currentColumn, calcColumn, string.Format("Column calculation wrong - cell: {0}", i));
-            Assert.AreEqual(currentRow, calcRow, string.Format("Row calculation wrong - cell: {0}", i));
-            if (++currentColumn >= column)
-            {
-                currentColumn = 0;
-                currentRow++;
-            }
+            IGridConfiguration conf = Substitute.For<IGridConfiguration>();
+            conf.ColumnCount.Returns(5);
+            conf.RowCount.Returns(5);
+            return conf;
         }
-    }
 
-    [Test]
-    public void BasicGridCreation()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        Assert.AreEqual(conf.ColumnCount, grid.Columns.Count);
-        Assert.AreEqual(conf.RowCount, grid.Rows.Count);
-
-        foreach (CellCollection column in grid.Columns)
+        [Test]
+        public void CalculateColumnRow()
         {
-            for (int i = 0; i < column.Count; i++)
+            int column = 5;
+            int row = 10;
+            int total = column * row;
+
+            int calcColumn;
+            int calcRow;
+
+            int currentColumn = 0;
+            int currentRow = 0;
+
+            for (int i = 0; i < total; i++)
             {
-                Assert.IsNotNull(column[i]);
-                Assert.AreEqual(i, column[i].Row);
+                GridMath.CalculateColumnRow(i, column, out calcColumn, out calcRow);
+                Assert.AreEqual(currentColumn, calcColumn, string.Format("Column calculation wrong - cell: {0}", i));
+                Assert.AreEqual(currentRow, calcRow, string.Format("Row calculation wrong - cell: {0}", i));
+                if (++currentColumn >= column)
+                {
+                    currentColumn = 0;
+                    currentRow++;
+                }
             }
         }
 
-        foreach (CellCollection row in grid.Rows)
+        [Test]
+        public void BasicGridCreation()
         {
-            for (int i = 0; i < row.Count; i++)
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            Assert.AreEqual(conf.ColumnCount, grid.Columns.Count);
+            Assert.AreEqual(conf.RowCount, grid.Rows.Count);
+
+            foreach (CellCollection column in grid.Columns)
             {
-                Assert.IsNotNull(row[i]);
-                Assert.AreEqual(i, row[i].Column);
+                for (int i = 0; i < column.Count; i++)
+                {
+                    Assert.IsNotNull(column[i]);
+                    Assert.AreEqual(i, column[i].Row);
+                }
+            }
+
+            foreach (CellCollection row in grid.Rows)
+            {
+                for (int i = 0; i < row.Count; i++)
+                {
+                    Assert.IsNotNull(row[i]);
+                    Assert.AreEqual(i, row[i].Column);
+                }
             }
         }
-    }
 
-    [Test]
-    public void SetGridCellContent()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        ICellContent content = Substitute.For<ICellContent>();
-        Cell cell = grid.GetCell(0, 0);
-        cell.Content = content;
-
-        Assert.AreEqual(content, grid.GetCell(0, 0).Content);
-    }
-
-    [Test]
-    public void ShiftRowRight()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
-        FillRowContents(grid, contents);
-
-        Assert.AreSame(contents[0], grid.Rows[0][0].Content);
-        Assert.AreSame(contents[1], grid.Rows[0][1].Content);
-        ICellContent firstColumnContent = grid.Rows[0][0].Content;
-
-        grid.Accept(new RowRightShifter(0, 3));
-
-        Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
-
-        grid.Accept(new RowRightShifter(0, 10));
-
-        Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
-
-        grid.Accept(new RowRightShifter(0, 13));
-
-        Assert.AreSame(firstColumnContent, grid.Rows[0][1].Content);
-    }
-
-    void FillRowContents(IGrid grid, List<ICellContent> contents)
-    {
-        foreach (CellCollection row in grid.Rows)
+        [Test]
+        public void SetGridCellContent()
         {
-            row.Foreach(delegate(Cell c)
-            {
-                ICellContent content = Substitute.For<ICellContent>();
-                c.Content = content;
-                contents.Add(content);
-            });
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            ICellContent content = Substitute.For<ICellContent>();
+            Cell.Cell cell = grid.GetCell(0, 0);
+            cell.Content = content;
+
+            Assert.AreEqual(content, grid.GetCell(0, 0).Content);
         }
-    }
 
-    [Test]
-    public void ShiftRowLeft()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
-        FillRowContents(grid, contents);
-
-        Assert.AreSame(contents[0], grid.Rows[0][0].Content);
-        Assert.AreSame(contents[1], grid.Rows[0][1].Content);
-        ICellContent firstColumnContent = grid.Rows[0][0].Content;
-
-        grid.Accept(new RowLeftShifter(0, 2));
-
-        Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
-    }
-
-    [Test]
-    public void ShiftColumnUp()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
-        FillColumnContents(grid, contents);
-
-        Assert.AreSame(contents[0], grid.Columns[0][0].Content);
-        Assert.AreSame(contents[1], grid.Columns[0][1].Content);
-        ICellContent firstRowContent = grid.Columns[0][0].Content;
-
-        grid.Accept(new ColumnUpShifter(0, 2));
-
-        Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
-    }
-    
-    [Test]
-    public void ShiftColumnDown()
-    {
-        IGridConfiguration conf = CreateTestConfig();
-        IGrid grid = new SquareGrid(conf);
-
-        List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
-        FillColumnContents(grid, contents);
-
-        Assert.AreSame(contents[0], grid.Columns[0][0].Content);
-        Assert.AreSame(contents[1], grid.Columns[0][1].Content);
-        ICellContent firstRowContent = grid.Columns[0][0].Content;
-
-        grid.Accept(new ColumnDownShifter(0, 3));
-
-        Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
-
-        grid.Accept(new ColumnDownShifter(0, 10));
-
-        Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
-
-        grid.Accept(new ColumnDownShifter(0, 13));
-
-        Assert.AreSame(firstRowContent, grid.Columns[0][1].Content);
-    }
-
-    void FillColumnContents(IGrid grid, List<ICellContent> contents)
-    {
-        foreach (CellCollection column in grid.Columns)
+        [Test]
+        public void ShiftRowRight()
         {
-            column.Foreach(delegate(Cell c)
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
+            FillRowContents(grid, contents);
+
+            Assert.AreSame(contents[0], grid.Rows[0][0].Content);
+            Assert.AreSame(contents[1], grid.Rows[0][1].Content);
+            ICellContent firstColumnContent = grid.Rows[0][0].Content;
+
+            grid.Accept(new RowRightShifter(0, 3));
+
+            Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
+
+            grid.Accept(new RowRightShifter(0, 10));
+
+            Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
+
+            grid.Accept(new RowRightShifter(0, 13));
+
+            Assert.AreSame(firstColumnContent, grid.Rows[0][1].Content);
+        }
+
+        void FillRowContents(IGrid grid, List<ICellContent> contents)
+        {
+            foreach (CellCollection row in grid.Rows)
             {
-                ICellContent content = Substitute.For<ICellContent>();
-                c.Content = content;
-                contents.Add(content);
-            });
+                row.Foreach(delegate(Cell.Cell c)
+                {
+                    ICellContent content = Substitute.For<ICellContent>();
+                    c.Content = content;
+                    contents.Add(content);
+                });
+            }
+        }
+
+        [Test]
+        public void ShiftRowLeft()
+        {
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
+            FillRowContents(grid, contents);
+
+            Assert.AreSame(contents[0], grid.Rows[0][0].Content);
+            Assert.AreSame(contents[1], grid.Rows[0][1].Content);
+            ICellContent firstColumnContent = grid.Rows[0][0].Content;
+
+            grid.Accept(new RowLeftShifter(0, 2));
+
+            Assert.AreSame(firstColumnContent, grid.Rows[0][3].Content);
+        }
+
+        [Test]
+        public void ShiftColumnUp()
+        {
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
+            FillColumnContents(grid, contents);
+
+            Assert.AreSame(contents[0], grid.Columns[0][0].Content);
+            Assert.AreSame(contents[1], grid.Columns[0][1].Content);
+            ICellContent firstRowContent = grid.Columns[0][0].Content;
+
+            grid.Accept(new ColumnUpShifter(0, 2));
+
+            Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
+        }
+
+        [Test]
+        public void ShiftColumnDown()
+        {
+            IGridConfiguration conf = CreateTestConfig();
+            IGrid grid = new SquareGrid(conf);
+
+            List<ICellContent> contents = new List<ICellContent>(conf.ColumnCount * conf.RowCount);
+            FillColumnContents(grid, contents);
+
+            Assert.AreSame(contents[0], grid.Columns[0][0].Content);
+            Assert.AreSame(contents[1], grid.Columns[0][1].Content);
+            ICellContent firstRowContent = grid.Columns[0][0].Content;
+
+            grid.Accept(new ColumnDownShifter(0, 3));
+
+            Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
+
+            grid.Accept(new ColumnDownShifter(0, 10));
+
+            Assert.AreSame(firstRowContent, grid.Columns[0][3].Content);
+
+            grid.Accept(new ColumnDownShifter(0, 13));
+
+            Assert.AreSame(firstRowContent, grid.Columns[0][1].Content);
+        }
+
+        void FillColumnContents(IGrid grid, List<ICellContent> contents)
+        {
+            foreach (CellCollection column in grid.Columns)
+            {
+                column.Foreach(delegate(Cell.Cell c)
+                {
+                    ICellContent content = Substitute.For<ICellContent>();
+                    c.Content = content;
+                    contents.Add(content);
+                });
+            }
         }
     }
 }

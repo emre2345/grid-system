@@ -1,24 +1,17 @@
-using System.Linq;
 using DH.GridSystem.Cell;
 using DH.GridSystem.Configuration;
 using DH.GridSystem.Grids;
-using UnityEngine;
 
 namespace DH.GridSystem.Factories
 {
-    public interface IRandomContentProvider
+    public class SquareGridWithGridVisualContent : IGridFactory
     {
-        IInstantiatableCellContent Get();
-    }
-
-    public class SquareGridWithRandomContent : IGridFactory
-    {
-        private IRandomContentProvider randomContentProvider;
+        private IInstantiatableCellContent visualContent;
         private IGridConfiguration gridConfig;
 
-        public SquareGridWithRandomContent(IRandomContentProvider randomContentProvider, IGridConfiguration gridConfig)
+        public SquareGridWithGridVisualContent(IInstantiatableCellContent visualContent, IGridConfiguration gridConfig)
         {
-            this.randomContentProvider = randomContentProvider;
+            this.visualContent = visualContent;
             this.gridConfig = gridConfig;
         }
 
@@ -31,7 +24,7 @@ namespace DH.GridSystem.Factories
             {
                 int row, column;
                 GridMath.CalculateColumnRow(i, gridConfig.ColumnCount, out column, out row);
-                grid.GetCell(column, row).Content = randomContentProvider.Get();
+                grid.GetCell(column, row).Content = visualContent.Instantiate();
             }
 
             return grid;
