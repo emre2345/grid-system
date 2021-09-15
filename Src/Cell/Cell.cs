@@ -11,11 +11,7 @@ namespace DH.GridSystem.Cell
 
         public int Row => row;
 
-        public Action<ICellContent> OnContentChanged
-        {
-            get;
-            set;
-        }
+        public Action<ICellContent> OnContentChanged { get; set; }
 
         private ICellContent content = new NullContent();
 
@@ -25,6 +21,10 @@ namespace DH.GridSystem.Cell
             set
             {
                 content = value;
+
+                if (content == null)
+                    content = new NullContent();
+
                 content.OnCellChanged?.Invoke(this);
                 OnContentChanged?.Invoke(content);
             }
@@ -34,6 +34,11 @@ namespace DH.GridSystem.Cell
         {
             this.column = column;
             this.row = row;
+        }
+
+        public void Empty()
+        {
+            Content = new NullContent();
         }
     }
 }

@@ -37,5 +37,7 @@ namespace DH.GridSystem.Cell
         {
             get { return cells.FindAll(c => c.Content.GetType() != typeof(NullContent)); }
         }
+
+        public List<Cell> EmptyCells => cells.FindAll(cell => cell.Content.GetType() == typeof(NullContent));
     }
 }

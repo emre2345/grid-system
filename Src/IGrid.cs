@@ -23,6 +23,11 @@ namespace DH.GridSystem
             get;
         }
 
+        Cell.Cell[] EmptyCells
+        {
+            get;
+        }
+
         void Accept(IGridVisitor visitor);
     }
 }

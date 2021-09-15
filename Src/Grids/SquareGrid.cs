@@ -29,6 +29,8 @@ namespace DH.GridSystem.Grids
             get { return allCells.CellsWithContent.ToArray(); }
         }
 
+        public Cell.Cell[] EmptyCells => allCells.EmptyCells.ToArray();
+
         public SquareGrid(IGridConfiguration config)
         {
             columnCount = config.ColumnCount;
