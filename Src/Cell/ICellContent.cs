@@ -9,6 +9,8 @@ namespace DH.GridSystem.Cell
 
     public class NullContent : ICellContent
     {
+        private static Lazy<NullContent> instance = new Lazy<NullContent>(() => new NullContent());
+        public static NullContent Instance => instance.Value;
         public Action<Cell> OnCellChanged { get; set; }
     }
 }

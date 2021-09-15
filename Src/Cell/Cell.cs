@@ -13,7 +13,9 @@ namespace DH.GridSystem.Cell
 
         public Action<ICellContent> OnContentChanged { get; set; }
 
-        private ICellContent content = new NullContent();
+        private ICellContent content = NullContent.Instance;
+
+        public bool IsEmpty => content.Equals(NullContent.Instance);
 
         public ICellContent Content
         {
@@ -23,7 +25,7 @@ namespace DH.GridSystem.Cell
                 content = value;
 
                 if (content == null)
-                    content = new NullContent();
+                    Empty();
 
                 content.OnCellChanged?.Invoke(this);
                 OnContentChanged?.Invoke(content);
@@ -38,7 +40,7 @@ namespace DH.GridSystem.Cell
 
         public void Empty()
         {
-            Content = new NullContent();
+            Content = NullContent.Instance;
         }
     }
 }
