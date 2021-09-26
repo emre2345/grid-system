@@ -15,7 +15,7 @@ namespace DH.GridSystem.Visitors
             this.shiftAmount = shiftAmount;
         }
 
-        public void Visit(SquareGrid g)
+        public void Visit(IGrid g)
         {
             Dictionary<int, ICellContent> contents = new Dictionary<int, ICellContent>(g.Rows[this.row].Count);
             CellCollection row = g.Rows[this.row];

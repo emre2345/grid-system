@@ -45,6 +45,17 @@ namespace DH.GridSystem.Test
         }
 
         [Test]
+        public void CalculateIndex()
+        {
+            int column = 4;
+            int row = 4;
+
+            int index = GridMath.CalculateIndexFromColumnRow(column, 3, 2);
+
+            Assert.AreEqual(11, index);
+        }
+
+        [Test]
         public void BasicGridCreation()
         {
             IGridConfiguration conf = CreateTestConfig();

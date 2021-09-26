@@ -7,5 +7,10 @@
             column = index % columnCount;
             row = (index - column) / columnCount;
         }
+
+        public static int CalculateIndexFromColumnRow(int columnCount, int column, int row)
+        {
+            return column + columnCount * row;
+        }
     }
 }

@@ -4,6 +4,6 @@ namespace DH.GridSystem.Visitors
 {
     public interface IGridVisitor
     {
-        void Visit(SquareGrid g);
+        void Visit(IGrid g);
     }
 }
